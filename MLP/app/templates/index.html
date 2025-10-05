@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Learning Demo MNIST</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='darkmode.css') }}" id="darkmode-css" disabled>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        section {
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+        }
+        button {
+            cursor: pointer;
+            padding: 10px 20px;
+            margin: 5px;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            background-color: #00bfff;
+            color: white;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #009acd;
+        }
+        #qr-generator img {
+            display: block;
+            margin: 15px auto;
+            max-width: 200px;
+        }
+        #file-results li {
+            margin: 5px 0;
+        }
+        .user-actions {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .user-actions a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #222;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        .user-actions a:hover {
+            color: #00bfff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    {% include 'navbar.html' %}
+
+    <!-- Acciones del usuario -->
+    <div class="user-actions">
+        {% if session.get('user') %}
+            <a href="{{ url_for('profile') }}">Perfil</a>
+            <a href="{{ url_for('my_predictions') }}">Mis Predicciones</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Registro</a>
+        {% endif %}
+    </div>
+
+    <!-- Sección: Demo MNIST -->
+    <section id="demo-mnist">
+        <h2>Demo MNIST</h2>
+        <canvas id="canvas-mnist" width="280" height="280" style="border:1px solid #000;"></canvas>
+        <div style="text-align:center;">
+            <button id="clear-canvas">Limpiar</button>
+        </div>
+        <p id="prediction-realtime" style="text-align:center;">Predicción en tiempo real: -</p>
+    </section>
+
+    <!-- Sección: Subida de imágenes -->
+    <section id="upload-demo">
+        <h2>Subir Imagen</h2>
+        <div style="text-align:center;">
+            <input type="file" id="file-input" multiple>
+            <button id="predict-files-btn">Predecir</button>
+        </div>
+        <ul id="file-results"></ul>
+    </section>
+
+    <!-- Sección: Gráficas -->
+    <section id="charts">
+        <h2>Estadísticas</h2>
+        <canvas id="accuracy-chart"></canvas>
+        <canvas id="loss-chart" style="margin-top:20px;"></canvas>
+    </section>
+
+    <!-- Sección: Generación de QR -->
+    <section id="qr-generator">
+        <h2>Generar QR de mis predicciones</h2>
+        <div style="text-align:center;">
+            <button id="generate-qr-btn" data-url="{{ url_for('generate_qr_route') }}">Generar QR</button>
+        </div>
+        <img id="qr-img" src="" alt="QR generado">
+    </section>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='darkmode.js') }}"></script>
+    <script src="{{ url_for('static', filename='charts.js') }}"></script>
+    <script src="{{ url_for('static', filename='realtime.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script>
+        // Botón QR dinámico
+        const qrBtn = document.getElementById('generate-qr-btn');
+        qrBtn.addEventListener('click', () => {
+            const qrImg = document.getElementById('qr-img');
+            const url = qrBtn.dataset.url;
+            // Añadimos timestamp para evitar cache
+            qrImg.src = url + '?t=' + new Date().getTime();
+        });
+    </script>
+</body>
+</html>

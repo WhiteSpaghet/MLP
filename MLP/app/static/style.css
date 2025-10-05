@@ -1,0 +1,155 @@
+/* app/style.css */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding-bottom: 50px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #005f73;
+    color: #fff;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 15px;
+    transition: color 0.3s;
+}
+
+.navbar a:hover {
+    color: #e0e0e0;
+}
+
+.navbar button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* Header */
+header {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #0a9396;
+    color: #fff;
+    border-radius: 10px;
+}
+
+/* Sections */
+section {
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 900px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+/* Canvas */
+#canvas-mnist {
+    border: 2px solid #333;
+    background-color: #fff;
+    cursor: crosshair;
+    display: block;
+    margin: 0 auto 15px auto;
+    border-radius: 8px;
+}
+
+/* Buttons */
+button {
+    margin: 5px 0;
+    padding: 10px 20px;
+    background-color: #005f73;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #0a9396;
+    transform: scale(1.05);
+}
+
+/* Inputs */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 15px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+/* Prediction Result */
+#prediction-result, #upload-results, #qr-result, #prediction-realtime, #file-results {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    section {
+        padding: 15px;
+    }
+
+    #canvas-mnist {
+        width: 90%;
+        height: auto;
+    }
+
+    button {
+        width: 100%;
+    }
+}

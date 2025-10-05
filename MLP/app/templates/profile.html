@@ -1,0 +1,18 @@
+{% include 'navbar.html' %}
+
+<div style="padding: 20px; max-width: 800px; margin: auto;">
+    <h2>Perfil de usuario</h2>
+
+    {% if user %}
+        <p><strong>Nombre de usuario:</strong> {{ user }}</p>
+        <p><strong>ID anónimo (si existe):</strong> {{ session.get('user_id', 'N/A') }}</p>
+
+        <a href="{{ url_for('my_predictions') }}">Ver mis predicciones</a>
+        <br><br>
+        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+    {% else %}
+        <p>No estás logueado.</p>
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Registro</a>
+    {% endif %}
+</div>

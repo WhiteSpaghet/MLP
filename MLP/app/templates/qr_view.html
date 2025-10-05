@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Predicciones MNIST</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='darkmode.css') }}" id="darkmode-css" disabled>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+        header { text-align: center; padding: 20px; background: #222; color: #fff; }
+        section { max-width: 800px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h2 { text-align: center; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #eee; }
+        canvas { display: block; margin: 20px auto; max-width: 100%; }
+    </style>
+</head>
+<body data-history='{{ history|tojson }}'>
+    <header>
+        <h1>📊 Mis Predicciones MNIST</h1>
+        <p>Vista generada vía QR</p>
+    </header>
+
+    <!-- Gráficas -->
+    <section>
+        <h2>Gráficas de Precisión y Pérdida</h2>
+        <canvas id="accuracy-chart" height="200"></canvas>
+        <canvas id="loss-chart" height="200"></canvas>
+    </section>
+
+    <!-- Tabla de historial -->
+    <section>
+        <h2>Historial de Predicciones</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Hora (UTC)</th>
+                    <th>Archivo/Canvas</th>
+                    <th>Predicción</th>
+                    <th>Confianza</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rec in history %}
+                <tr>
+                    <td>{{ rec.time }}</td>
+                    <td>{{ rec.filename or 'Canvas' }}</td>
+                    <td>{{ rec.pred }}</td>
+                    <td>{{ '%.2f' % (rec.confidence*100) }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        const historyData = JSON.parse(document.body.dataset.history);
+
+        const labels = historyData.map((_, i) => i + 1);
+        const accData = historyData.map(d => d.confidence ?? 0);
+        const lossData = historyData.map(d => 1 - (d.confidence ?? 0));
+
+        const ctxAcc = document.getElementById('accuracy-chart').getContext('2d');
+        const ctxLoss = document.getElementById('loss-chart').getContext('2d');
+
+        new Chart(ctxAcc, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Precisión (Accuracy)',
+                    data: accData,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: { responsive: true, scales: { y: { min: 0, max: 1 } } }
+        });
+
+        new Chart(ctxLoss, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Pérdida (Loss)',
+                    data: lossData,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(230, 104, 131, 0.2)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+    </script>
+</body>
+</html>

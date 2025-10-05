@@ -1,0 +1,14 @@
+flask
+flask-session
+tensorflow
+numpy
+pillow
+opencv-python-headless
+firebase-admin
+qrcode
+pandas
+matplotlib
+scikit-learn
+plotly
+werkzeug
+seaborn

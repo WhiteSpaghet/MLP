@@ -1,0 +1,34 @@
+{% include 'navbar.html' %}
+
+<div style="padding: 20px; max-width: 1000px; margin: auto;">
+    <h2>Mis Predicciones</h2>
+
+    {% if history %}
+        <table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%;">
+            <thead>
+                <tr>
+                    <th>Hora (UTC)</th>
+                    <th>Archivo / Canvas</th>
+                    <th>Predicción</th>
+                    <th>Confianza</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rec in history %}
+                    <tr>
+                        <td>{{ rec.time }}</td>
+                        <td>{{ rec.filename or 'Canvas' }}</td>
+                        <td>{{ rec.pred }}</td>
+                        <td>{{ "%.2f"|format(rec.confidence * 100) }}%</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="{{ url_for('export') }}">Exportar CSV</a>
+        <br><br>
+        <a href="{{ url_for('generate_qr_route') }}">Generar QR con mis predicciones</a>
+    {% else %}
+        <p>No hay predicciones registradas aún.</p>
+    {% endif %}
+</div>

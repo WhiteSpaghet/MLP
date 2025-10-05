@@ -1,0 +1,119 @@
+<nav class="navbar">
+    <div class="navbar-left">
+        <a href="{{ url_for('index') }}" class="brand">MNIST AI Demo</a>
+    </div>
+
+    <div class="navbar-right">
+        <a href="{{ url_for('index') }}">Inicio</a>
+        <a href="{{ url_for('index') }}#demo-mnist">Demo MNIST</a>
+        <a href="{{ url_for('index') }}#upload-demo">Prueba IA</a>
+        <a href="{{ url_for('stats') }}">Métricas</a>
+        <a href="{{ url_for('generate_qr_route') }}">Generar QR</a>
+
+        {% if session.get('user') %}
+            <!-- Usuario logueado -->
+            <div class="dropdown">
+                <button class="dropbtn">{{ session.get('user') }} ▼</button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('profile') }}">Mi Perfil</a>
+                    <a href="{{ url_for('my_predictions') }}">Mis Predicciones</a>
+                    <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+                </div>
+            </div>
+        {% else %}
+            <!-- Usuario anónimo -->
+            <div class="dropdown">
+                <button class="dropbtn">Anónimo ▼</button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('my_predictions') }}">Mis Predicciones</a>
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('register') }}">Registro</a>
+                </div>
+            </div>
+        {% endif %}
+
+        <button id="toggle-darkmode-navbar">🌙</button>
+    </div>
+</nav>
+
+<style>
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #222;
+    color: #fff;
+    flex-wrap: wrap;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 8px;
+    transition: color 0.2s;
+}
+
+.navbar a:hover {
+    color: #00bfff;
+}
+
+.brand {
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 5px 10px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    min-width: 180px;
+    right: 0;
+    z-index: 1000;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.dropdown-content a {
+    color: #fff;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #444;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+#toggle-darkmode-navbar {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-left: 10px;
+}
+
+@media (max-width: 768px) {
+    .navbar-right { display: flex; flex-direction: column; align-items: flex-start; }
+    .navbar a, .dropbtn, #toggle-darkmode-navbar { margin: 5px 0; }
+}
+</style>
